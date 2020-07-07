@@ -3,6 +3,7 @@ package com.niluogege.databindingdebug
 import android.util.Log
 import android.view.View
 import android.widget.Toast
+import androidx.databinding.ObservableBoolean
 import androidx.databinding.ObservableField
 import androidx.databinding.ObservableInt
 import com.niluogege.databindingdebug.Action
@@ -11,6 +12,7 @@ class KotlinVm(val activity: MainActivity) {
 
     val editText = ObservableField<String>("")
     val text = ObservableField<String>("")
+    val visiable = ObservableBoolean(false)
 
 
     val btnClick = object : Action {
