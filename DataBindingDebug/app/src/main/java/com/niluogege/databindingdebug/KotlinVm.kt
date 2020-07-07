@@ -10,13 +10,20 @@ import com.niluogege.databindingdebug.Action
 class KotlinVm(val activity: MainActivity) {
 
     val editText = ObservableField<String>("")
-    val text = ObservableField<String>("waaaaaa")
+    val text = ObservableField<String>("")
 
 
     val btnClick = object : Action {
         override fun invoke(view: View) {
-            Log.e("Tag",view.toString())
+            Log.e("Tag", view.toString())
             Toast.makeText(activity, editText.get(), Toast.LENGTH_LONG).show()
+        }
+
+    }
+
+    val includeBtnClick = object : Action {
+        override fun invoke(view: View) {
+            text.set("include 点击了")
         }
 
     }

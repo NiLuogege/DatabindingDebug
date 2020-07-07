@@ -12,6 +12,6 @@ class MainActivity : AppCompatActivity() {
         val binding = DataBindingUtil.setContentView<ActivityMainBinding>(this, R.layout.activity_main)
         val vm = KotlinVm(this)
         binding.viewModel = vm
-        vm.text.set("wawaaww")
+        vm.text.set("平常心")
     }
 }
