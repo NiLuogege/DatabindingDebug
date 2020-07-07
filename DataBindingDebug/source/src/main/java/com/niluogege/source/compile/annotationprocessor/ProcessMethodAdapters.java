@@ -37,6 +37,12 @@ import java.lang.reflect.Modifier;
 import java.sql.Types;
 import java.util.HashSet;
 import java.util.List;
+import javax.lang.model.element.Element;
+import javax.lang.model.element.ElementKind;
+import javax.lang.model.element.ExecutableElement;
+import javax.lang.model.element.Modifier;
+import javax.lang.model.element.TypeElement;
+import javax.lang.model.element.VariableElement;
 
 public class ProcessMethodAdapters extends ProcessDataBinding.ProcessingStep {
     private final static String INVERSE_BINDING_EVENT_ATTR_SUFFIX = "AttrChanged";
@@ -82,7 +88,10 @@ public class ProcessMethodAdapters extends ProcessDataBinding.ProcessingStep {
     private void addBindingAdapters(RoundEnvironment roundEnv, ProcessingEnvironment
             processingEnv, SetterStore store) {
         LibTypes libTypes = ModelAnalyzer.getInstance().libTypes;
+        // BindingAdapter 注解的 class 对象
         Class<? extends Annotation> adapterAnnotation = libTypes.getBindingAdapterClass();
+
+        //遍历所有有 BindingAdapter 注解的  Element
         for (Element element : AnnotationUtil
                 .getElementsAnnotatedWith(roundEnv, adapterAnnotation)) {
             try {

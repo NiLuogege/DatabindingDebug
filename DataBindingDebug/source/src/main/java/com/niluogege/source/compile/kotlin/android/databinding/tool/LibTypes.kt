@@ -131,6 +131,7 @@ class LibTypes(val useAndroidX: Boolean) {
         else -> android.databinding.Bindable::class.java
     }
 
+    //获取 BindingAdapter 注解的 class对象
     val bindingAdapterClass = when {
         useAndroidX -> androidx.databinding.BindingAdapter::class.java
         else -> android.databinding.BindingAdapter::class.java
