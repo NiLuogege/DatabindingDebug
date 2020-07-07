@@ -1,2 +1,3 @@
 rootProject.name='DataBindingDebug'
 include ':app'
+include ':source'
