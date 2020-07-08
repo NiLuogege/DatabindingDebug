@@ -59,13 +59,16 @@ import javax.annotation.processing.ProcessingEnvironment;
 import javax.annotation.processing.RoundEnvironment;
 import javax.xml.bind.JAXBException;
 
+/**
+ * 处理表达式
+ */
 public class ProcessExpressions extends ProcessDataBinding.ProcessingStep {
     public ProcessExpressions() {
     }
 
     @Override
     public boolean onHandleStep(RoundEnvironment roundEnvironment,
-            ProcessingEnvironment processingEnvironment, CompilerArguments args)
+                                ProcessingEnvironment processingEnvironment, CompilerArguments args)
             throws JAXBException {
         try {
             ResourceBundle resourceBundle;
@@ -83,7 +86,7 @@ public class ProcessExpressions extends ProcessDataBinding.ProcessingStep {
                     infoLog = ResourceBundle.loadClassInfoFromFolder(args.getClassLogDir());
                     L.d("done reading class log. cools.");
                 } catch (IOException e) {
-                    L.d(e,"failed to read class log :/");
+                    L.d(e, "failed to read class log :/");
                     infoLog = new GenClassInfoLog();
                     Scope.defer(new ScopedException("cannot load the info log from %s",
                             args.getClassLogDir()));
@@ -132,6 +135,7 @@ public class ProcessExpressions extends ProcessDataBinding.ProcessingStep {
         return true;
     }
 
+    //获取依赖中间体
     private List<IntermediateV2> loadDependencyIntermediates() {
         final List<Intermediate> original = GenerationalClassUtil.get().load(
                 GenerationalClassUtil.ExtensionFilter.LAYOUT, Intermediate.class);
@@ -149,16 +153,16 @@ public class ProcessExpressions extends ProcessDataBinding.ProcessingStep {
 
     private void saveIntermediate(CompilerArguments args, IntermediateV2 intermediate) {
         GenerationalClassUtil.get().write(args.getModulePackage(),
-                        GenerationalClassUtil.ExtensionFilter.LAYOUT, intermediate);
+                GenerationalClassUtil.ExtensionFilter.LAYOUT, intermediate);
     }
 
     @Override
     public void onProcessingOver(RoundEnvironment roundEnvironment,
-            ProcessingEnvironment processingEnvironment, CompilerArguments args) {
+                                 ProcessingEnvironment processingEnvironment, CompilerArguments args) {
     }
 
     private IntermediateV2 createIntermediateFromLayouts(File layoutInfoDir,
-            List<IntermediateV2> intermediateList) {
+                                                         List<IntermediateV2> intermediateList) {
         L.d("creating intermediate list from input layouts of %s", layoutInfoDir);
         final Set<String> excludeList = new HashSet<String>();
         for (IntermediateV2 lib : intermediateList) {
@@ -178,7 +182,8 @@ public class ProcessExpressions extends ProcessDataBinding.ProcessingStep {
                 }
             } else {
                 L.d("layout info folder does not exist, skipping for %s", layoutInfoDir.getPath());
-            };
+            }
+            ;
         } else {
             // it is a directory, search sub folders.
             for (File layoutFile : FileUtils.listFiles(layoutInfoDir, new String[]{"xml"}, true)) {
@@ -208,7 +213,7 @@ public class ProcessExpressions extends ProcessDataBinding.ProcessingStep {
     }
 
     private void loadLayoutInfoFromZipFile(File zipFile, IntermediateV2 result,
-            Set<String> excludeList) throws IOException {
+                                           Set<String> excludeList) throws IOException {
         ZipFile zf = new ZipFile(zipFile);
         L.d("checking zip file %s", zipFile);
         final Enumeration<? extends ZipEntry> entries = zf.entries();
@@ -337,6 +342,7 @@ public class ProcessExpressions extends ProcessDataBinding.ProcessingStep {
     public static class IntermediateV2 extends IntermediateV1 {
         // specify so that we can define updates ourselves.
         private static final long serialVersionUID = 2L;
+
         @Override
         public void appendTo(ResourceBundle resourceBundle, boolean fromSource) throws JAXBException {
             for (Map.Entry<String, String> entry : mLayoutInfoMap.entrySet()) {
