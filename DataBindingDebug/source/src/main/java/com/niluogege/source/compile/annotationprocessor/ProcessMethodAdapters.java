@@ -100,6 +100,7 @@ public class ProcessMethodAdapters extends ProcessDataBinding.ProcessingStep {
                     L.e(element, "@BindingAdapter on invalid element: %s", element);
                     continue;
                 }
+                //将  BindingAdapter 注解封装 到BindingAdapterCompat 中
                 BindingAdapterCompat bindingAdapter = BindingAdapterCompat.create(element);
 
                 ExecutableElement executableElement = (ExecutableElement) element;
@@ -141,6 +142,8 @@ public class ProcessMethodAdapters extends ProcessDataBinding.ProcessingStep {
                     continue;
                 }
                 warnAttributeNamespaces(element, bindingAdapter.getAttributes());
+
+                //这个自定义的 BindingAdapter 添加到 store 中
                 try {
                     if (numAttributes == 1) {
                         final String attribute = bindingAdapter.getAttributes()[0];

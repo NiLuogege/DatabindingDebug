@@ -20,6 +20,8 @@ import javax.lang.model.element.Element
 
 /**
  * Wrapper for BindingAdapter annotation
+ *
+ * BindingAdapter 注解的封装
  */
 class BindingAdapterCompat(val attributes : Array<String>, val requireAll : Boolean) {
     companion object {
