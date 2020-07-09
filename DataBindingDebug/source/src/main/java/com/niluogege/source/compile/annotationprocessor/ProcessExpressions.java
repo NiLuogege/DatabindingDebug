@@ -288,6 +288,7 @@ public class ProcessExpressions extends ProcessDataBinding.ProcessingStep {
                 L.e(e, "Cannot create list of written classes");
             }
         }
+        //回调 onChefReady 方法
         mCallback.onChefReady(compilerChef, classInfoLog);
     }
 

@@ -324,7 +324,7 @@ public class DataBindingUtil {
      *
      * @param component 默认为 null
      * @param parent 父View
-     * @param startChildren
+     * @param startChildren 起始位置
      * @param layoutId 目标 layoutId
      * @param <T>
      * @return
@@ -334,7 +334,8 @@ public class DataBindingUtil {
         //child view 总数
         final int endChildren = parent.getChildCount();
         final int childrenAdded = endChildren - startChildren;
-        if (childrenAdded == 1) {
+        if (childrenAdded == 1) {//activity setContentView 路径进来的话 childrenAdded 是 1
+            //获取 第 0 个 子 view
             final View childView = parent.getChildAt(endChildren - 1);
             return bind(component, childView, layoutId);
         } else {

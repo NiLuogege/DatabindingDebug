@@ -79,7 +79,7 @@ public class CompilerChef {
     };
     private JavaFileWriter mFileWriter;
     private ResourceBundle mResourceBundle;
-    private DataBinder mDataBinder;
+    private android.databinding.tool.DataBinder mDataBinder;
     private boolean mEnableV2;
     // the compiler chef we create for V1 dependencies
     @Nullable
@@ -114,7 +114,7 @@ public class CompilerChef {
     public void ensureDataBinder() {
         if (mDataBinder == null) {
             LibTypes libTypes = ModelAnalyzer.getInstance().libTypes;
-            mDataBinder = new DataBinder(mResourceBundle, mEnableV2, libTypes);
+            mDataBinder = new android.databinding.tool.DataBinder(mResourceBundle, mEnableV2, libTypes);
             mDataBinder.setFileWriter(mFileWriter);
         }
     }
@@ -188,8 +188,10 @@ public class CompilerChef {
             CompilerArguments compilerArgs,
             BindableBag.BRMapping brValueLookup,
             List<String> modulePackages) {
+        //如果是v2 版本就走  BindingMapperWriterV2 如果不是就走  BindingMapperWriter
         if (compilerArgs.isEnableV2()) {
             // figure out which mappers exists as they may not exist for v1 libs.
+            //生成我们自己包下的  DataBinderMapperImpl
             SortedSet<String> availableDependencyModules = getDirectDependencies(
                     processingEnv, compilerArgs, modulePackages);
             final boolean generateMapper;
@@ -219,6 +221,7 @@ public class CompilerChef {
                     // only generate v1 compat if we are generating the merged
                     writeMapperForV1Compat(compilerArgs, brValueLookup);
                 }
+                // 生成 android 包下的 DataBinderMapperImpl
                 writeMergedMapper(compilerArgs);
             }
         } else {
@@ -278,7 +281,7 @@ public class CompilerChef {
                 dbr.write(brValueLookup));
     }
 
-    public List<LayoutBinder> getLayoutBinders() {
+    public List<android.databinding.tool.LayoutBinder> getLayoutBinders() {
         return mDataBinder.getLayoutBinders();
     }
 
@@ -314,7 +317,7 @@ public class CompilerChef {
             return Collections.emptySet();
         }
         File input = new File(compilerArgs.getBaseFeatureInfoDir(),
-                DataBindingBuilder.FEATURE_PACKAGE_LIST_FILE_NAME);
+                android.databinding.tool.DataBindingBuilder.FEATURE_PACKAGE_LIST_FILE_NAME);
         if (!input.exists()) {
             return Collections.emptySet();
         }
@@ -358,7 +361,7 @@ public class CompilerChef {
      */
     public void addBRVariables(BindableHolder bindables) {
         ensureDataBinder();
-        for (LayoutBinder layoutBinder : mDataBinder.mLayoutBinders) {
+        for (android.databinding.tool.LayoutBinder layoutBinder : mDataBinder.mLayoutBinders) {
             for (String variableName : layoutBinder.getUserDefinedVariables().keySet()) {
                 bindables.addVariable(variableName, layoutBinder.getClassName());
             }
