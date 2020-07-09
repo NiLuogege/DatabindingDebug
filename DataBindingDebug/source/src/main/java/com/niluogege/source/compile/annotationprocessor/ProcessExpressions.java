@@ -113,6 +113,8 @@ public class ProcessExpressions extends ProcessDataBinding.ProcessingStep {
                     }
                 }
             }
+
+            //拆分 layout 文件
             IntermediateV2 mine = createIntermediateFromLayouts(args.getLayoutInfoDir(),
                     intermediateList);
             if (mine != null) {
@@ -125,6 +127,7 @@ public class ProcessExpressions extends ProcessDataBinding.ProcessingStep {
             }
             // generate them here so that bindable parser can read
             try {
+                //生成绑定 class 文件
                 writeResourceBundle(resourceBundle, args, infoLog, v1CompatChef);
             } catch (Throwable t) {
                 L.e(t, "cannot generate view binders");
@@ -254,12 +257,14 @@ public class ProcessExpressions extends ProcessDataBinding.ProcessingStep {
         }
         if (compilerChef.hasAnythingToGenerate()) {
             if (!compilerArgs.isEnableV2()) {
+                //生成 ...Binding.class 文件
                 compilerChef.writeViewBinderInterfaces(compilerArgs.isLibrary()
                         && !compilerArgs.isTestVariant());
             }
             if (compilerArgs.isApp() != compilerArgs.isTestVariant()
                     || (compilerArgs.isEnabledForTests() && !compilerArgs.isLibrary())
                     || compilerArgs.isEnableV2()) {
+                //生成 ...BindingImpl.class 文件
                 compilerChef.writeViewBinders(compilerArgs.getMinApi());
             }
         }

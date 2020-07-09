@@ -4,6 +4,8 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.databinding.DataBindingUtil
 import com.niluogege.databindingdebug.databinding.ActivityMainBinding
+import com.niluogege.databindingdebug.databinding.ActivityMergeBinding
+import com.niluogege.databindingdebug.databinding.ActivityMergeBindingImpl
 
 class MainActivity : AppCompatActivity() {
 

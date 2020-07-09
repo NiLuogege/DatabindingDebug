@@ -1283,6 +1283,8 @@ class LayoutBinderWriter(val layoutBinder : LayoutBinder, val libTypes: LibTypes
      * This code is only kept for backward compatibility reasons as we move to v2. If you change
      * anything here, make sure it is also changed in BaseLayoutBinderWriter.
      */
+
+    // 生成 ...Binding.class 文件
     @Deprecated("v2 uses BaseLayoutBinderWriter")
     public fun writeBaseClass(forLibrary: Boolean, variations: List<LayoutBinder>) : String =
             kcode("package ${layoutBinder.`package`};") {
