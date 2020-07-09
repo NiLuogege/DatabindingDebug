@@ -52,12 +52,14 @@ public class MergedDataBinderMapper extends DataBinderMapper {
      *
      * @param mapper The new DataBinderMapper to add to the list of mappers.
      */
+    //第一次加载 DataBindingUtil 所有的 DataBinderMapperImpl 都会缓存到 mExistingMappers 和 mMappers 中
     @SuppressWarnings("WeakerAccess")
     public void addMapper(DataBinderMapper mapper) {
         Class<? extends DataBinderMapper> mapperClass = mapper.getClass();
         if (mExistingMappers.add(mapperClass)) {
             mMappers.add(mapper);
             final List<DataBinderMapper> dependencies = mapper.collectDependencies();
+            //找到所有依赖 也添加进去
             for(DataBinderMapper dependency : dependencies) {
                 addMapper(dependency);
             }
@@ -73,6 +75,7 @@ public class MergedDataBinderMapper extends DataBinderMapper {
     public ViewDataBinding getDataBinder(DataBindingComponent bindingComponent, View view,
                                          int layoutId) {
         for(DataBinderMapper mapper : mMappers) {
+            //通过 layout id 找到 对应 ...BindingImpl 并返回，
             ViewDataBinding result = mapper.getDataBinder(bindingComponent, view, layoutId);
             if (result != null) {
                 return result;

@@ -718,6 +718,7 @@ public abstract class ViewDataBinding extends BaseObservable implements ViewBind
      * included layouts.
      * @hide
      */
+    // 遍历 view 通过比对 tag 进行赋值
     protected static Object[] mapBindings(DataBindingComponent bindingComponent, View root,
                                           int numBindings, IncludedLayouts includes, SparseIntArray viewsWithIds) {
         Object[] bindings = new Object[numBindings];

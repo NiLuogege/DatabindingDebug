@@ -16,6 +16,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
+        android:tag="xsss"
         android:layout_height="match_parent"
         android:orientation="vertical"
         tools:context=".MainActivity">
@@ -23,14 +24,17 @@
         <EditText
             android:layout_width="match_parent"
             android:layout_height="80dp"
+            android:tag="xsss"
             android:text="@={viewModel.editText}" />
 
 
         <Button
+            android:id="@+id/btn"
             onClickBtn="@{viewModel.btnClick}"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="点我"
+            android:tag="xsss"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
@@ -43,6 +47,7 @@
             android:layout_marginTop="20dp"
             android:layout_marginBottom="20dp"
             android:text="@{viewModel.text}"
+            android:tag="xsss"
             android:textColor="@android:color/holo_red_dark"
             android:textSize="20sp"
             android:visibility="@{viewModel.visiable?View.VISIBLE:View.GONE}" />

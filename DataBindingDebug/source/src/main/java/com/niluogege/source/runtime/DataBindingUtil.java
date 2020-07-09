@@ -199,6 +199,7 @@ public class DataBindingUtil {
 
     static <T extends ViewDataBinding> T bind(DataBindingComponent bindingComponent, View root,
                                               int layoutId) {
+        //通过 android 包下的 DataBinderMapperImpl 获取到 所有 自己包下的 DataBinderMapperImpl
         return (T) sMapper.getDataBinder(bindingComponent, root, layoutId);
     }
 
