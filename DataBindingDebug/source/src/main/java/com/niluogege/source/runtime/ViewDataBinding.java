@@ -598,9 +598,10 @@ public abstract class ViewDataBinding extends BaseObservable implements ViewBind
                 mPendingRebind = true;
             }
             if (USE_CHOREOGRAPHER) {
-                //当下一帧来临会调用 mFrameCallback
+                //当下一帧来临会调用 mFrameCallback ，最后还是会 调用 mRebindRunnable
                 mChoreographer.postFrameCallback(mFrameCallback);
             } else {
+                //直接调用 mRebindRunnable
                 mUIThreadHandler.post(mRebindRunnable);
             }
         }
