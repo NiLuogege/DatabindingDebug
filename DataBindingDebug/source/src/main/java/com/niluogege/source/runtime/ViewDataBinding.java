@@ -98,6 +98,7 @@ public abstract class ViewDataBinding extends BaseObservable implements ViewBind
     private static final CreateWeakListener CREATE_PROPERTY_LISTENER = new CreateWeakListener() {
         @Override
         public WeakListener create(ViewDataBinding viewDataBinding, int localFieldId) {
+            //创建一个 WeakPropertyListener 并返回其中的 WeakListener
             return new WeakPropertyListener(viewDataBinding, localFieldId).getListener();
         }
     };
@@ -128,6 +129,7 @@ public abstract class ViewDataBinding extends BaseObservable implements ViewBind
     private static final CreateWeakListener CREATE_LIVE_DATA_LISTENER = new CreateWeakListener() {
         @Override
         public WeakListener create(ViewDataBinding viewDataBinding, int localFieldId) {
+            //创建 LiveDataListener 并返回其中的 Listener
             return new LiveDataListener(viewDataBinding, localFieldId).getListener();
         }
     };
@@ -199,6 +201,7 @@ public abstract class ViewDataBinding extends BaseObservable implements ViewBind
                     return;
                 }
             }
+            //重新绑定一次（这个步骤会刷新数据）
             executePendingBindings();
         }
     };
@@ -392,13 +395,17 @@ public abstract class ViewDataBinding extends BaseObservable implements ViewBind
         if (mLifecycleOwner != null) {
             mLifecycleOwner.getLifecycle().removeObserver(mOnStartListener);
         }
+        //记录 传递进来的 mLifecycleOwner
         mLifecycleOwner = lifecycleOwner;
         if (lifecycleOwner != null) {
             if (mOnStartListener == null) {
                 mOnStartListener = new OnStartListener(this);
             }
+            //设置一个 onStart 时候的 观察者
             lifecycleOwner.getLifecycle().addObserver(mOnStartListener);
         }
+
+        //遍历 mLocalFieldObservers 将 lifecycleOwner 设置给每一个 Observer
         for (WeakListener<?> weakListener : mLocalFieldObservers) {
             if (weakListener != null) {
                 weakListener.setLifecycleOwner(lifecycleOwner);
@@ -475,6 +482,7 @@ public abstract class ViewDataBinding extends BaseObservable implements ViewBind
             }
         }
         if (!mRebindHalted) {
+            //执行绑定
             executeBindings();
             if (mRebindCallbacks != null) {
                 mRebindCallbacks.notifyCallbacks(this, REBOUND, null);
@@ -553,6 +561,7 @@ public abstract class ViewDataBinding extends BaseObservable implements ViewBind
         }
         boolean result = onFieldChange(mLocalFieldId, object, fieldId);
         if (result) {
+            //重新构建UI
             requestRebind();
         }
     }
@@ -589,6 +598,7 @@ public abstract class ViewDataBinding extends BaseObservable implements ViewBind
                 mPendingRebind = true;
             }
             if (USE_CHOREOGRAPHER) {
+                //当下一帧来临会调用 mFrameCallback
                 mChoreographer.postFrameCallback(mFrameCallback);
             } else {
                 mUIThreadHandler.post(mRebindRunnable);
@@ -613,7 +623,9 @@ public abstract class ViewDataBinding extends BaseObservable implements ViewBind
             return unregisterFrom(localFieldId);
         }
         WeakListener listener = mLocalFieldObservers[localFieldId];
+        //第一次注册
         if (listener == null) {
+            //注册
             registerTo(localFieldId, observable, listenerCreator);
             return true;
         }
@@ -684,9 +696,11 @@ public abstract class ViewDataBinding extends BaseObservable implements ViewBind
         }
         WeakListener listener = mLocalFieldObservers[localFieldId];
         if (listener == null) {
+            //创建一个 WeakListener
             listener = listenerCreator.create(this, localFieldId);
             mLocalFieldObservers[localFieldId] = listener;
             if (mLifecycleOwner != null) {
+                //调用到 LiveDataListener 的  setLifecycleOwner
                 listener.setLifecycleOwner(mLifecycleOwner);
             }
         }
@@ -1400,6 +1414,7 @@ public abstract class ViewDataBinding extends BaseObservable implements ViewBind
         }
 
         public void setLifecycleOwner(LifecycleOwner lifecycleOwner) {
+            //将 lifecycleOwner 传递给 WeakPropertyListener
             mObservable.setLifecycleOwner(lifecycleOwner);
         }
 
@@ -1407,6 +1422,7 @@ public abstract class ViewDataBinding extends BaseObservable implements ViewBind
             unregister();
             mTarget = object;
             if (mTarget != null) {
+                //调用 WeakPropertyListener 的 addListener
                 mObservable.addListener(mTarget);
             }
         }
@@ -1449,6 +1465,8 @@ public abstract class ViewDataBinding extends BaseObservable implements ViewBind
 
         @Override
         public void addListener(Observable target) {
+            //给 自己 添加 OnPropertyChangedCallback 监听 也就是当
+            // LiveData属性改变的时候 会调用自己的  onPropertyChanged 方法
             target.addOnPropertyChangedCallback(this);
         }
 
@@ -1592,6 +1610,8 @@ public abstract class ViewDataBinding extends BaseObservable implements ViewBind
                     liveData.removeObserver(this);
                 }
                 if (lifecycleOwner != null) {
+                    // liveData 添加 监听，如果 LiveData
+                    // 有改变就会 调用自己的  onChanged 方法
                     liveData.observe(owner, this);
                 }
             }
